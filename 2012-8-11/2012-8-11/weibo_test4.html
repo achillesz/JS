@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {padding:0; margin:0;}
+#div1 {width:500px; margin:10px auto; overflow:hidden;}
+#div1 div {position:relative; border-bottom:1px dashed #999; padding:10px; overflow:hidden;}
+.clear {clear:both;}
+.acc, .ref {float:right; color:black; text-decoration:none; padding-left:28px; height:24px; line-height:24px; margin:0 10px;}
+.acc {background:url(img/bg_fn.png) no-repeat 0 -60px;}
+.ref {background:url(img/bg_fn.png) no-repeat 0 -90px;}
+.acc:hover, .ref:hover {text-decoration:underline;}
+
+#page {width:500px; margin:10px auto;}
+#page a {width:23px; height:22px; line-height:22px; font-size:14px; border:1px solid #E6EBEF; background:white; margin-right:5px; text-align:center; float:left; text-decoration:none;}
+#page a:hover {background:#EBEBEB; text-decoration:underline;}
+#page .active {border:1px solid white;}
+#page .active:hover {background:white; text-decoration:none;}
+
+#div2 {width:500px; margin:10px auto; text-align:right;}
+#txt1 {width:100%; height:50px;}
+
+.time {float:left; line-height:24px; color:#999;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 微博ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+function setCookie(name, value, iDay)
+{
+	if(iDay!==false)
+	{
+		var oDate=new Date();
+		oDate.setDate(oDate.getDate()+iDay);
+		
+		document.cookie=name+'='+value+';expires='+oDate;
+	}
+	else
+	{
+		document.cookie=name+'='+value;
+	}
+}
+
+function getCookie(name)
+{
+	var arr=document.cookie.split('; ');
+	var i=0;
+	
+	for(i=0;i<arr.length;i++)
+	{
+		var arr2=arr[i].split('=');
+		
+		if(arr2[0]==name)
+		{
+			return arr2[1];
+		}
+	}
+	
+	return '';
+}
+
+function removeCookie(name)
+{
+	setCookie(name, 'a', -1);
+}
+
+function json2url(json)
+{
+	var arr=[];
+	
+	for(var i in json)
+	{
+		arr.push(i+'='+json[i]);
+	}
+	
+	arr.push('t='+new Date().getTime());
+	
+	return arr.join('&');
+}
+
+function time2date(t)
+{
+	function toDou(n)
+	{
+		return n<10?'0'+n:''+n;
+	}
+	var oDate=new Date();
+	
+	oDate.setTime(t*1000);
+	
+	return oDate.getFullYear()+'-'+toDou(oDate.getMonth()+1)+'-'+toDou(oDate.getDate())+' '+toDou(oDate.getHours())+':'+toDou(oDate.getMinutes());
+}
+
+window.onload=function ()
+{
+	var oDiv=document.getElementById('div1');
+	var iNowPage=1;
+	//添加
+	var oTxt=document.getElementById('txt1');
+	var oBtn=document.getElementById('btn1');
+	
+	oBtn.onclick=function ()
+	{
+		var url='weibo.php?'+json2url({
+			act: 'add',
+			content: oTxt.value
+		});
+		
+		ajax(url, function (str){
+			var json=eval('('+str+')');
+			var oNewDiv=createDiv(json.id, oTxt.value, json.time, 0, 0);
+			
+			//oDiv.appendChild(oNewDiv);
+			oDiv.insertBefore(oNewDiv, oDiv.firstChild);
+			oTxt.value='';
+			
+			if(oDiv.children.length>6)
+			{
+				oDiv.removeChild(oDiv.children[oDiv.children.length-1]);
+			}
+		});
+	};
+	
+	function createDiv(id, content, time, acc, ref)
+	{
+		//创建div
+		var oNewDiv=document.createElement('div');
+		
+		oNewDiv.innerHTML=
+			'<p>'+content+'</p>'+
+			'<a href="javascript:;" class="ref">'+ref+'</a>'+
+			'<a href="javascript:;" class="acc">'+acc+'</a>'+
+			'<span class="time">'+time2date(time)+'</span>';
+		
+		var aA=oNewDiv.getElementsByTagName('a');
+		
+		aA[0].onclick=function ()	//踩
+		{
+		};
+		aA[1].onclick=function ()	//顶
+		{
+			var url='weibo.php?'+json2url({
+				act: 'acc',
+				id: id
+			});
+			
+			ajax(url, function (){
+				aA[1].innerHTML=parseInt(aA[1].innerHTML)+1;
+			});
+		};
+		
+		return oNewDiv;
+	}
+	
+	//获取
+	function getPage(n)
+	{
+		var url='weibo.php?'+json2url({
+			act: 'get',
+			page: n
+		});
+		
+		ajax(url, function (str){
+			var arr=eval(str);
+			
+			oDiv.innerHTML='';	//一定清空原来的
+			
+			for(var i=0;i<arr.length;i++)
+			{
+				var oNewDiv=createDiv(arr[i].id, arr[i].content, arr[i].time, arr[i].acc, arr[i].ref);
+				
+				oDiv.appendChild(oNewDiv);
+			}
+		});
+	}
+	
+	getPage(1);	//为了一开始不是空的，一加载完就得执行
+	
+	//分页
+	var oPage=document.getElementById('page');
+	function getPageCount()
+	{
+		var url='weibo.php?'+json2url({
+			act: 'get_page_count'
+		});
+		
+		ajax(url, function (str){
+			var json=eval('('+str+')');
+			
+			oPage.innerHTML='';
+			
+			for(var i=1;i<=json.count;i++)
+			{
+				var oA=document.createElement('a');
+				
+				if(i==iNowPage)
+				{
+					oA.className='active';
+				}
+				
+				oA.index=i;
+				oA.innerHTML=i;
+				oA.href='javascript:;';
+				
+				oPage.appendChild(oA);
+				
+				oA.onclick=function ()
+				{
+					getPage(this.index);
+					
+					var aA=oPage.getElementsByTagName('a');
+					for(var i=0;i<aA.length;i++)
+					{
+						aA[i].className='';
+					}
+					this.className='active';
+				};
+			}
+		});
+	}
+	
+	getPageCount();
+};
+</script>
+</head>
+
+<body>
+<div id="div2">
+	<textarea id="txt1" cols="40" style="overflow:auto;"></textarea><br>
+	<input id="btn1" type="button" value="发布" />
+</div>
+<div id="div1">
+	<!--<div>
+    	<p>据马云说，软银的孙正义要求走第二条。“你马云有办法的，我在中国投资了那么多公司都可以（协议控制），凭什么你不可以？”
+杨致远“两边倒”。马云拿起桌上的笔和烟对本刊记者比划，“反对（马云终止协议控制的提议）吧，他觉得公司如果（拿不到牌照）垮了那他得承担责任；同意吧，他回去（向雅虎）交代不了，所以他干脆不表态。”</p>
+        <a href="javascript:;" class="ref">22</a>
+        <a href="javascript:;" class="acc">0</a>
+		<span class="time">2012-12-5 14:23</span>
+    </div>-->
+</div>
+<div id="page">
+	<!--<a href="#">1</a>
+	<a href="#">2</a>
+	<a href="#">3</a>
+	<a href="#">...</a>
+	<a href="#">8</a>-->
+</div>
+</body>
+</html>

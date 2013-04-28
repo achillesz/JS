@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin:0; padding:0;}
+div {margin:20px auto; width:300px; background:#EEE; border:1px solid #999; padding:20px; line-height:30px;}
+span {display:inline-block; width:80px;}
+input {width:200px;}
+#add_btn, #login_btn {width:50px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 用户注册ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+function json2url(json)
+{
+	var arr=[];
+	for(var i in json)
+	{
+		arr.push(i+'='+json[i]);
+	}
+	
+	arr.push('t='+new Date().getTime());
+	
+	//arr->['act=add', 'user=blue', ...]
+	
+	return arr.join('&');
+}
+
+//json2url({act: 'add', user: 'blue', pass: '123456'})
+	//act=add&user=blue&pass=123456
+
+window.onload=function ()
+{
+	var oTxtAddUser=document.getElementById('add_user');
+	var oTxtAddPass=document.getElementById('add_pass');
+	var oBtnAdd=document.getElementById('add_btn');
+	
+	oBtnAdd.onclick=function ()
+	{
+		//var url='user.php?act=add&user='+oTxtAddUser.value+'&pass='+oTxtAddPass.value+'&t='+new Date().getTime();
+		
+		var url='user.php?'+json2url({
+			act: 'add',
+			user: oTxtAddUser.value,
+			pass: oTxtAddPass.value
+		});
+		
+		ajax(url, function (str){
+			var res=eval('('+str+')');
+			
+			if(res.error)
+			{
+				alert('出错');
+			}
+			else
+			{
+				alert('注册成功');
+			}
+		});
+	};
+};
+</script>
+</head>
+
+<body>
+<div id="div1">
+	<h2>用户注册</h2>
+	<span>用户名：</span><input id="add_user" type="text" /><br />
+    <span>密码：</span><input id="add_pass" type="password" /><br />
+    <input id="add_btn" type="button" value="注册" />
+</div>
+<div id="div2">
+	<h2>用户登陆</h2>
+	<span>用户名：</span><input id="login_user" type="text" /><br />
+    <span>密码：</span><input id="login_pass" type="password" /><br />
+    <input id="login_btn" type="button" value="登陆" />
+</div>
+</body>
+</html>

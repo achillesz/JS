@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[];
+arr.length=1000;
+
+function hashAdd(ID, obj)
+{
+	//映射
+	var n=ID%arr.length;
+	
+	//冲突消解
+	while(arr[n])
+	{
+		//n++;
+		n=(n+1)%arr.length;
+	}
+	arr[n]=obj;
+	arr[n].deteled=false;
+}
+
+function hashFind(ID)
+{
+	//映射
+	var n=ID%arr.length;
+	
+	while(arr[n] && arr[n].ID!=ID)
+	{
+		n++;
+	}
+	
+	if(!arr[n] || arr[n].deleted==true)
+	{
+		return null;
+	}
+	else
+	{
+		return arr[n];
+	}
+}
+
+function hashDel(ID)
+{
+	//不对的方法
+	//映射
+	var n=ID%arr.length;
+	
+	//找下一个
+	while(
+		arr[n]			//n这个位置是否有东西
+		&&
+		arr[n].ID!=ID	//n这个位置，不是我要找的东西
+	)
+	{
+		n++;
+	}
+	
+	if(
+		!arr[n]			/*找的东西，他应该在的位置，是个空的*/
+		||
+		arr[n].ID!=ID	/*他应该在的位置上有东西，但是不是他*/
+	)
+	{
+		//返回出去，不要继续删除了
+		return;
+	}
+	
+	//说明：找到了
+	//delete arr[n];	//错的
+	arr[n].deleted=true;
+}
+
+var p1={ID: 2145, name: 'blue'};
+var p2={ID: 3145, name: '海涛'};
+
+hashAdd(p1.ID, p1);
+hashAdd(p2.ID, p2);
+
+hashDel(2145);
+
+var obj=hashFind(3145);
+
+if(obj)
+{
+	alert('找到了：'+obj.name);
+}
+else
+{
+	alert('没找到');
+}
+</script>
+</head>
+
+<body>
+</body>
+</html>

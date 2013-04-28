@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin:0; padding:0;}
+div {margin:20px auto; width:300px; background:#EEE; border:1px solid #999; padding:20px; line-height:30px;}
+span {display:inline-block; width:80px;}
+input {width:200px;}
+#add_btn, #login_btn {width:50px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 用户注册ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+function json2url(json)
+{
+	var arr=[];
+	for(var i in json)
+	{
+		arr.push(i+'='+json[i]);
+	}
+	
+	arr.push('t='+new Date().getTime());
+	
+	//arr->['act=add', 'user=blue', ...]
+	
+	return arr.join('&');
+}
+
+//json2url({act: 'add', user: 'blue', pass: '123456'})
+	//act=add&user=blue&pass=123456
+
+window.onload=function ()
+{
+	var oTxtAddUser=document.getElementById('add_user');
+	var oTxtAddPass=document.getElementById('add_pass');
+	var oBtnAdd=document.getElementById('add_btn');
+	
+	oBtnAdd.onclick=function ()
+	{
+		var url='user.php?'+json2url({
+			act: 'add',
+			user: oTxtAddUser.value,
+			pass: oTxtAddPass.value
+		});
+		
+		ajax(url, function (str){
+			var res=eval('('+str+')');
+			
+			if(res.error)
+			{
+				alert('出错');
+			}
+			else
+			{
+				alert('注册成功');
+			}
+		});
+	};
+	
+	
+	
+	var oLoginUser=document.getElementById('login_user');
+	var oLoginPass=document.getElementById('login_pass');
+	var oLoginBtn=document.getElementById('login_btn');
+	
+	var oDiv2=document.getElementById('div2');
+	var oDiv3=document.getElementById('div3');
+	
+	var clear = document.getElementById("clear");
+	
+	oLoginBtn.onclick=function ()
+	{
+		//var url='user.php?act=add&user='+oTxtAddUser.value+'&pass='+oTxtAddPass.value+'&t='+new Date().getTime();
+		
+		var url='user.php?'+json2url({
+			act: 'login',
+			user: oLoginUser.value,
+			pass: oLoginPass.value
+		});
+		
+		ajax(url, function (str){
+			var res=eval('('+str+')');
+			
+			if(res.error)
+			{
+				alert('出错');
+			}
+			else
+			{
+				alert('注册成功');
+				setCookie('user', oLoginUser.value, 30);
+				setCookie('pass', oLoginPass.value, 30);
+				oDiv2.style.display = "none";
+				oDiv3.style.display = "block";
+				oDiv3.innerHTML="用户名"+getCookie('user')+"<br/>密码"+getCookie('pass');
+			}
+		});
+	};
+	if(getCookie('user'))
+	{
+		oDiv2.style.display = "none";
+		oDiv3.style.display = "block";
+		oDiv3.innerHTML="用户名"+getCookie('user')+"<br/>密码"+getCookie('pass')
+	}
+	
+	clear.onclick = function(){
+		
+		removeCookie("user");
+		removeCookie("pass");
+		oDiv2.style.display = "block";
+		oDiv3.style.display = "none";
+		oLoginUser.value = "";
+		oLoginPass.value = "";
+	}
+	
+};
+
+function setCookie(name, value, iDay)
+{
+	var oDate=new Date();
+	
+	oDate.setDate(oDate.getDate()+iDay);
+	
+	document.cookie=name+'='+value+';expires='+oDate;
+}
+
+function getCookie(name)
+{
+	//'username=abc; password=123456; aaa=123; bbb=4r4er'
+	var arr=document.cookie.split('; ');
+	var i=0;
+	
+	//arr->['username=abc', 'password=123456', ...]
+	
+	for(i=0;i<arr.length;i++)
+	{
+		//arr2->['username', 'abc']
+		var arr2=arr[i].split('=');
+		
+		if(arr2[0]==name)
+		{
+			return arr2[1];
+		}
+	}
+	
+	return '';
+}
+
+function removeCookie(name)
+{
+	setCookie(name, '1', -1);
+}
+
+
+
+</script>
+</head>
+
+<body>
+<div id="div1">
+	<h2>用户注册</h2>
+	<span>用户名：</span><input id="add_user" type="text" /><br />
+    <span>密码：</span><input id="add_pass" type="password" /><br />
+    <input id="add_btn" type="button" value="注册" />
+</div>
+<div id="div2">
+	<h2>用户登陆</h2>
+	<span>用户名：</span><input id="login_user" type="text" /><br />
+    <span>密码：</span><input id="login_pass" type="password" /><br />
+    <input id="login_btn" type="button" value="登陆" />
+</div>
+
+<div id="div3" style="width:150px; height:100px; background:#ccc; border:1px solid #333; text-align:center; font-size:24px; display:none; text-align:left; ">
+	登陆成功
+</div>
+<a href="javascript:;" id="clear">清除cookies</a>
+</body>
+</html>

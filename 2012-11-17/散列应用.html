@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[];
+arr.length=1000;
+
+//存
+var p1={ID: 124587962145, name: 'blue'};
+
+arr[p1.ID%arr.length]=p1;
+
+//用
+//alert(arr[p1.ID%arr.length].name);
+
+//存
+var p2={ID: 127894962145, name: '海涛'};
+
+arr[p2.ID%arr.length]=p2;
+
+//用
+alert(arr[124587962145%arr.length].name);
+</script>
+</head>
+
+<body>
+</body>
+</html>

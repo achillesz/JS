@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+span {width:100%; float:left; text-align:center;}
+div {padding:10px; border:1px solid black; float:left; width:50%; box-sizing:border-box;}
+</style>
+<script>
+//节点
+//{value: 12, lchild: null, rchild: null}
+</script>
+<script>
+var root=null;
+
+function btree_add(value)
+{
+	//第一次添加——连根都没有
+	if(!root)
+	{
+		root={value: value, l: null, r: null};
+	}
+	else	//以前添加过，至少根有了
+	{
+		function add(node, value)
+		{
+			if(node.value<value)
+			{
+				//右子树添加
+				
+				//1.有了右子树
+				if(node.r)
+				{
+					add(node.r, value);
+				}
+				//2.压根没有右子树
+				else
+				{
+					node.r={value: value, l: null, r: null};
+				}
+			}
+			else
+			{
+				//左
+				
+				//1.有了左子树
+				if(node.l)
+				{
+					add(node.l, value);
+				}
+				//2.压根没有左子树
+				else
+				{
+					node.l={value: value, l: null, r: null};
+				}
+			}
+		}
+		
+		add(root, value);
+	}
+}
+
+function btree_find(value)
+{
+	var found=false;
+	function find(node, value)
+	{
+		var str='找到'+node.value+'了，';
+		if(node.value==value)
+		{
+			str+='找到了';
+			
+			alert(str);
+			
+			found=true;
+			return;
+		}
+		if(node.value<value)
+		{
+			if(node.r)
+			{
+				str+='走右边';
+				alert(str);
+				find(node.r, value);
+			}
+			else
+			{
+				str+='应该走右边，但是没了';
+				alert(str);
+			}
+		}
+		else
+		{
+			if(node.l)
+			{
+				str+='走左边';
+				alert(str);
+				find(node.l, value);
+			}
+			else
+			{
+				str+='应该走左边，但是没了';
+				alert(str);
+			}
+		}
+	}
+	find(root, value);
+	
+	return found;
+}
+
+btree_add(1);
+btree_add(2);
+btree_add(3);
+btree_add(4);
+btree_add(5);
+btree_add(6);
+btree_add(7);
+btree_add(8);
+btree_add(9);
+btree_add(10);
+
+window.onload=function ()
+{
+	btree_view(document.body, root);
+	document.body.children[0].style.width='100%';
+	
+	//btree_find(5);
+};
+
+function btree_view(parent, node)
+{
+	var oDiv=document.createElement('div');
+	
+	oDiv.innerHTML='<span>'+node.value+'</span>';
+	
+	if(node.l)
+		btree_view(oDiv, node.l);
+	else
+	{
+		var oNewDiv=document.createElement('div');
+		oNewDiv.style.background='#CCC';
+		oDiv.appendChild(oNewDiv);
+	}
+		
+	if(node.r)
+		btree_view(oDiv, node.r);
+	else
+	{
+		var oNewDiv=document.createElement('div');
+		oNewDiv.style.background='#CCC';
+		oDiv.appendChild(oNewDiv);
+	}
+	
+	parent.appendChild(oDiv);
+}
+</script>
+</head>
+
+<body>
+</body>
+</html>

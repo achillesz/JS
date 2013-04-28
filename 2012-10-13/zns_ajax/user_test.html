@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin:0; padding:0;}
+div {margin:20px auto; width:300px; background:#EEE; border:1px solid #999; padding:20px; line-height:30px;}
+span {display:inline-block; width:80px;}
+input {width:200px;}
+#add_btn, #login_btn {width:50px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 用户注册ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+window.onload=function ()
+{
+	var oBtnAdd=document.getElementById('add_btn');
+	var oTxtUserAdd=document.getElementById('add_user');
+	var oTxtPassAdd=document.getElementById('add_pass');
+	var oBtnLogin=document.getElementById('login_btn');
+	var oTxtUserLogin=document.getElementById('login_user');
+	var oTxtPassLogin=document.getElementById('login_pass');
+	
+	oBtnAdd.onclick=function ()
+	{
+		ajax('user.php?act=add&user='+encodeURI(oTxtUserAdd.value)+'&pass='+encodeURI(oTxtPassAdd.value)+'&t='+new Date().getTime(), function (str){
+			var json=eval('('+str+')');
+			if(json.error)
+			{
+				alert('注册失败，原因：'+json.desc);
+			}
+			else
+			{
+				alert('注册成功，可到user_view.php查看结果');
+			}
+		});
+	};
+	
+	oBtnLogin.onclick=function ()
+	{
+		ajax('user.php?act=login&user='+encodeURI(oTxtUserAdd.value)+'&pass='+encodeURI(oTxtPassAdd.value)+'&t='+new Date().getTime(), function (str){
+			var json=eval('('+str+')');
+			if(json.error)
+			{
+				alert('登陆失败，原因：'+json.desc);
+			}
+			else
+			{
+				alert('登陆成功 :)');
+			}
+		});
+	};
+};
+</script>
+</head>
+
+<body>
+<div id="div1">
+	<h2>用户注册</h2>
+	<span>用户名：</span><input id="add_user" type="text" /><br />
+    <span>密码：</span><input id="add_pass" type="password" /><br />
+    <input id="add_btn" type="button" value="注册" />
+</div>
+<div id="div2">
+	<h2>用户登陆</h2>
+	<span>用户名：</span><input id="login_user" type="text" /><br />
+    <span>密码：</span><input id="login_pass" type="password" /><br />
+    <input id="login_btn" type="button" value="登陆" />
+</div>
+</body>
+</html>

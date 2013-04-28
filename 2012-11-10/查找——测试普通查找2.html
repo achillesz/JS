@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[];
+for(var i=0;i<1000000;i++)
+{
+	arr[i]=i;
+}
+
+Array.prototype.indexOf=function (n)
+{
+	var start=0;
+	var end=this.length-1;
+	
+	while(1)
+	{
+		var center=Math.floor((start+end)/2);
+		if(this[center]==n)
+		{
+			return center;
+		}
+		else
+		{
+			if(this[center]<n)
+			{
+				start=center+1;
+			}
+			else
+			{
+				end=center-1;
+			}
+			
+			if(start>=end)
+			{
+				return -1;
+			}
+		}
+	}
+};
+
+var t=new Date().getTime();
+
+for(var i=0;i<1000000;i++)
+{
+	var m=Math.floor(Math.random()*1000000);
+	
+	arr.indexOf(m);
+}
+
+alert(new Date().getTime()-t);
+</script>
+</head>
+
+<body>
+</body>
+</html>

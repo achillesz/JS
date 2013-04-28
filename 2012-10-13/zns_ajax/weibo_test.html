@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {padding:0; margin:0;}
+#div1 {width:500px; margin:10px auto; overflow:hidden;}
+#div1 div {position:relative; border-bottom:1px dashed #999; padding:10px; overflow:hidden;}
+.clear {clear:both;}
+.acc, .ref {float:right; color:black; text-decoration:none; padding-left:28px; height:24px; line-height:24px; margin:0 10px;}
+.acc {background:url(img/bg_fn.png) no-repeat 0 -60px;}
+.ref {background:url(img/bg_fn.png) no-repeat 0 -90px;}
+.acc:hover, .ref:hover {text-decoration:underline;}
+
+#page {width:500px; margin:10px auto;}
+#page a {width:23px; height:22px; line-height:22px; font-size:14px; border:1px solid #E6EBEF; background:white; margin-right:5px; text-align:center; float:left; text-decoration:none;}
+#page a:hover {background:#EBEBEB; text-decoration:underline;}
+#page .active {border:1px solid white;}
+#page .active:hover {background:white; text-decoration:none;}
+
+#div2 {width:500px; margin:10px auto; text-align:right;}
+#txt1 {width:100%; height:50px;}
+
+.time {float:left; line-height:24px; color:#999;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 微博ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+function getStrTime(t)
+{
+	t*=1000;
+	
+	var oDate=new Date();
+	
+	oDate.setTime(t);
+	
+	return oDate.getFullYear()+'-'+(oDate.getMonth()+1)+'-'+oDate.getDate()+' '+oDate.getHours()+':'+oDate.getMinutes();
+}
+
+window.onload=function ()
+{
+	//1.发布
+	var oTxt=document.getElementById('txt1');
+	var oBtn=document.getElementById('btn1');
+	var oDiv=document.getElementById('div1');
+	
+	oBtn.onclick=function ()
+	{
+		var url='weibo.php?act=add&content='+oTxt.value+'&t='+new Date().getTime();
+		
+		ajax(url, function (str){
+			var json=eval('('+str+')');
+			
+			if(json.error)
+			{
+				alert('添加失败');
+			}
+			else
+			{
+				var oNewDiv=document.createElement('div');
+				
+				oNewDiv.innerHTML=
+					'<p>'+oTxt.value+'</p>'+
+					'<a href="javascript:;" class="ref">0</a>'+
+					'<a href="javascript:;" class="acc">0</a>'+
+					'<span class="time">'+getStrTime(json.time)+'</span>';
+				
+				//oDiv.appendChild(oNewDiv);
+				if(oDiv.children.length)
+				{
+					oDiv.insertBefore(oNewDiv, oDiv.children[0]);
+				}
+				else
+				{
+					oDiv.appendChild(oNewDiv);
+				}
+				
+				if(oDiv.children.length>6)
+				{
+					oDiv.removeChild(oDiv.children[6]);
+				}
+			}
+		});
+	};
+};
+</script>
+</head>
+
+<body>
+<div id="div2">
+	<textarea id="txt1" cols="40" style="overflow:auto;"></textarea><br>
+	<input id="btn1" type="button" value="发布" />
+</div>
+<div id="div1">
+	<!--<div>
+    	<p>据马云说，软银的孙正义要求走第二条。“你马云有办法的，我在中国投资了那么多公司都可以（协议控制），凭什么你不可以？”
+杨致远“两边倒”。马云拿起桌上的笔和烟对本刊记者比划，“反对（马云终止协议控制的提议）吧，他觉得公司如果（拿不到牌照）垮了那他得承担责任；同意吧，他回去（向雅虎）交代不了，所以他干脆不表态。”</p>
+        <a href="javascript:;" class="ref">22</a>
+        <a href="javascript:;" class="acc">0</a>
+        <span class="time">2012-10-13 14:32</span>
+    </div>-->
+</div>
+<div id="page">
+	<!--<a href="#">1</a>
+	<a href="#">2</a>
+	<a href="#">3</a>
+	<a href="#">...</a>
+	<a href="#">8</a>-->
+</div>
+</body>
+</html>

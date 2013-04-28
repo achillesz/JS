@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[12,6,9,44,57,1,8,98,123,5];
+
+Array.prototype.mySort=function ()
+{
+	//复杂度：(n-1)*(n-1)		n*n		O(n2)
+	//前插：比较（n2），移动（n）
+	for(var i=0;i<arr.length-1;i++)
+	{
+		alert('第'+i+'次：'+arr);
+		//1.找出最大的位置
+		var max=0;
+		var maxIndex=-1;
+		
+		for(var j=i+1;j<arr.length;j++)
+		{
+			if(arr[j]>max)
+			{
+				max=arr[j];
+				maxIndex=j;
+			}
+		}
+		
+		var tmp=arr[i];
+		arr[i]=arr[maxIndex];
+		arr[maxIndex]=tmp;
+	}
+};
+
+arr.mySort();
+
+alert(arr);
+</script>
+</head>
+
+<body>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[12, 8, 9, 66];	//10000个
+
+Array.prototype.indexOf=function (n)
+{
+	//平均 n/2
+	//时间复杂度：O(n)
+	for(var i=0;i<this.length;i++)
+	{
+		if(this[i]==n)
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+};
+
+alert(arr.indexOf(9));
+</script>
+</head>
+
+<body>
+</body>
+</html>

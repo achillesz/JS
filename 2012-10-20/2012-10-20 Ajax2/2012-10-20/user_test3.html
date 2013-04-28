@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin:0; padding:0;}
+div {margin:20px auto; width:300px; background:#EEE; border:1px solid #999; padding:20px; line-height:30px;}
+span {display:inline-block; width:80px;}
+input {width:200px;}
+#add_btn, #login_btn {width:50px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 用户注册ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+function json2url(json)
+{
+	json.t=new Date().getTime();
+	
+	var arr=[];
+	
+	for(var i in json)
+	{
+		arr.push(i+'='+json[i]);
+	}
+	
+	return arr.join('&');
+}
+
+//alert(json2url({a: 12, b: 5, c: 33}));
+
+//{a: 12, b: 5}->a=12&b=5
+
+window.onload=function ()
+{
+	//ajax：
+	/*
+	拼url
+	访问
+	处理结果
+	*/
+	//注册
+	var oTxtAddUser=document.getElementById('add_user');
+	var oTxtAddPass=document.getElementById('add_pass');
+	var oBtnAdd=document.getElementById('add_btn');
+	
+	oBtnAdd.onclick=function ()
+	{
+		//1.拼url——后台接口
+		//var url='user.php?act=add&user='+oTxtAddUser.value+'&pass='+oTxtAddPass.value+'&t='+new Date().getTime();
+		var url='user.php?'+json2url({
+			act:	'add',
+			user:	oTxtAddUser.value,
+			pass:	oTxtAddPass.value
+		});
+		
+		//2.请求URL
+		ajax(url, function (str){
+			//3.返回结果
+			var json=eval('('+str+')');
+			
+			if(json.error)
+			{
+				alert('失败：'+json.desc);
+			}
+			else
+			{
+				alert('成功');
+			}
+		});
+	};
+};
+</script>
+</head>
+
+<body>
+<div id="div1">
+	<h2>用户注册</h2>
+	<span>用户名：</span><input id="add_user" type="text" /><br />
+    <span>密码：</span><input id="add_pass" type="password" /><br />
+    <input id="add_btn" type="button" value="注册" />
+</div>
+<div id="div2">
+	<h2>用户登陆</h2>
+	<span>用户名：</span><input id="login_user" type="text" /><br />
+    <span>密码：</span><input id="login_pass" type="password" /><br />
+    <input id="login_btn" type="button" value="登陆" />
+</div>
+</body>
+</html>

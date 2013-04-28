@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+     function init(selector, context) {
+        selector = selector || document;
+
+
+        if (typeof selector == "string") {
+            var match = quickExpr.exec(selector);
+            /*
+             * 通过match变量来将string类型的情况再区分成两类:
+             * (1) 是HTML字符串或者ID字符串的情况
+             * (2) 其他,如'.className', 'tagName'之类.
+             */
+            if (match && (match[1] || !context)) {
+                if (match[1])
+                    selector = jQuery.clean([match[1]], context);
+                else {
+                    var elem = document.getElementById(match[3]);
+                    if (elem) {
+                        /*
+                         * 原本可以直接返回结果了, 但是由于IE和Opera有一个小小的Bug, 因此要处理一下再返回.
+                         */
+
+                        // Handle the case where IE and Opera return items
+                        // by name instead of ID
+                        // COMP: 翻译: 处理IE和Opera会用name代替ID返回元素的问题
+                        if (elem.id != match[3])
+                        //jQuery()将会返回一个用document生成的jQuery对象
+                            return jQuery().find(selector);
+
+                        // Otherwise, we inject the element directly into the jQuery object
+                        // 好了, 我们将选择到的元素注入到jQuery对象的里, 最后返回.
+                        return jQuery(elem);
+                    }
+                    // 如果代码能运行到这里, 说明match[3]并不能让getElementById选择到任何元素, 把selector设置成[], 让后面的代码收拾手尾
+                    selector = [];
+                }
+
+            }
+
+            // HANDLE: $(expr, [context])
+            // (which is just equivalent to: $(content).find(expr)
+            // 翻译: 处理 $(expr,[context])
+            // (这跟$(content).find(expr)是一样的)
+            /* 如果传入的selector不是HTML字符串或者ID字符串(如'.class','div'之类),那就用context新建一个jQuery对象, 然后在这个对象中再查找
+             * selector所指定的元素, 最后返回一个jQuery对象. 更多细节, 可以参考jQuery.fn.find函数的中文注释.
+             */
+            else
+                return jQuery(context).find(selector);
+        }
+
+        // HANDLE: $(function)
+        // Shortcut for document ready
+        // 看看是不是类型(3)- 函数(function)类型?
+        // 如果传进来的是一个function, 那么就用docuemnt新建一个jQuery对象, 让后使用jQuery对象的ready函数, 将selector(现在它是一个函数)绑定
+        // 到DOM Ready 事件(不知道什么是DOM Ready事件? Ctrl+F搜索 "read:"!最后一个搜索结果有说明 ).
+        // 要完成上面我所说的功能下面代码中的'load'就显得比较诡异. 在 jQuery 1.3.2里面, 下面的代码已经被改进为:
+        /*
+         * else if ( jQuery.isFunction( selector ) )
+         *   return jQuery( document ).ready( selector );
+         */
+
+
+        // 如果是类型(2)和(4)(从代码中可以看出他们是作相同的处理的):
+        // 经过上面的处理之后,程序还能运行到这里(没有return),说明selector是一个类数组对象(或者就是Array对象). 那我们就不管你是jQuery对象还是Array对
+        // 象,都使用 jQuery.makeArray(selector)来把这个selector对象转换成一个真正的Array.
+        // 最后使用setArray将数组放到自己(也就是this,它是一个jQuery对象)存储匹配元素的数组(matched element set)里面,然后返回自己这个jQuery对象
+        // 有关细节, 可以参考jQuery.fn.setArray, jQuery.fn.setArray的中文注释.
+        return this.setArray(jQuery.makeArray(selector));
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {padding:0; margin:0;}
+#div1 {width:500px; margin:10px auto; overflow:hidden;}
+#div1 div {position:relative; border-bottom:1px dashed #999; padding:10px; overflow:hidden;}
+.clear {clear:both;}
+.acc, .ref {float:right; color:black; text-decoration:none; padding-left:28px; height:24px; line-height:24px; margin:0 10px;}
+.acc {background:url(img/bg_fn.png) no-repeat 0 -60px;}
+.ref {background:url(img/bg_fn.png) no-repeat 0 -90px;}
+.acc:hover, .ref:hover {text-decoration:underline;}
+
+#page {width:500px; margin:10px auto;}
+#page a {width:23px; height:22px; line-height:22px; font-size:14px; border:1px solid #E6EBEF; background:white; margin-right:5px; text-align:center; float:left; text-decoration:none;}
+#page a:hover {background:#EBEBEB; text-decoration:underline;}
+#page .active {border:1px solid white;}
+#page .active:hover {background:white; text-decoration:none;}
+
+#div2 {width:500px; margin:10px auto; text-align:right;}
+#txt1 {width:100%; height:50px;}
+
+.time {float:left; line-height:24px; color:#999;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 微博ajax接口测试</title>
+<script src="ajax.js"></script>
+<script>
+window.onload=function ()
+{
+	var oTxt=document.getElementById('txt1');
+	var oBtn=document.getElementById('btn1');
+	var oDiv=document.getElementById('div1');
+	var oPage=document.getElementById('page');
+	var iNowPage=0;
+	var PAGE_SIZE=6;
+	
+	function d(n)
+	{
+		return (n>9?'':'0')+n;
+	}
+	
+	function addItem(id, content, time, acc, ref)
+	{
+		var oDate=new Date(time*1000);
+		var oNewDiv=document.createElement('div');
+		
+		var sDate=oDate.getFullYear()+'-'+d(oDate.getMonth()+1)+'-'+d(oDate.getDate())+' '+d(oDate.getHours())+':'+d(oDate.getMinutes());
+				
+		oNewDiv.innerHTML='<p>'+content+'</p><a href="javascript:;" class="ref">'+ref+'</a><a href="javascript:;" class="acc">'+acc+'</a><span class="time">'+sDate+'</span>';
+		
+		var aDiv=oDiv.getElementsByTagName('div');
+		
+		if(aDiv.length)
+		{
+			oDiv.insertBefore(oNewDiv, aDiv[0]);
+		}
+		else
+		{
+			oDiv.appendChild(oNewDiv);
+		}
+		
+		while(aDiv.length>PAGE_SIZE)
+		{
+			oDiv.removeChild(aDiv[aDiv.length-1]);
+			getPageCount();
+		}
+		
+		var aA=oNewDiv.getElementsByTagName('a');
+		aA[0].onclick=function ()
+		{
+			var _this=this;
+			
+			ajax('weibo.php?act=ref&id='+id+'&t='+new Date().getTime(),function (){
+				_this.innerHTML=parseInt(_this.innerHTML)+1;
+			});
+			this.onclick=null;
+		};
+		aA[1].onclick=function ()
+		{
+			var _this=this;
+			
+			ajax('weibo.php?act=acc&id='+id+'&t='+new Date().getTime(),function (){
+				_this.innerHTML=parseInt(_this.innerHTML)+1;
+			});
+			this.onclick=null;
+		};
+	}
+	
+	function getPage(n)
+	{
+		ajax('weibo.php?act=get&page='+n+'&t='+new Date().getTime(), function (str){
+			oDiv.innerHTML='';
+			
+			var arr=eval(str);
+			
+			for(var i=arr.length-1;i>=0;i--)
+			{
+				addItem(arr[i].id, arr[i].content, arr[i].time, arr[i].acc, arr[i].ref);
+			}
+		});
+	}
+	
+	function getPageCount()
+	{
+		ajax('weibo.php?act=get_page_count&t='+new Date().getTime(), function (str){
+			oPage.innerHTML='';
+			
+			var json=eval('('+str+')');
+			
+			for(var i=0;i<json.count;i++)
+			{
+				var oA=document.createElement('a');
+				
+				oA.href='javascript:;';
+				oA.innerHTML=i+1;
+				
+				if(i==iNowPage)
+				{
+					oA.className='active';
+				}
+				else
+				{
+					oA.index=i;
+					oA.onclick=function ()
+					{
+						iNowPage=this.index;
+						getPage(iNowPage+1);
+						getPageCount();
+					};
+				}
+				
+				oPage.appendChild(oA);
+			}
+		});
+	}
+	
+	oBtn.onclick=function ()
+	{
+		ajax('weibo.php?act=add&content='+encodeURI(oTxt.value)+'&t='+new Date().getTime(), function (str){
+			var json=eval('('+str+')');
+			
+			addItem(json.id, oTxt.value, json.time, 0, 0);
+			
+			oTxt.value='';
+		});
+	};
+	
+	//获取第一页的数据
+	getPage(1);
+	getPageCount();
+};
+</script>
+</head>
+
+<body>
+<div id="div2">
+	<textarea id="txt1" cols="40" style="overflow:auto;"></textarea><br>
+	<input id="btn1" type="button" value="发布" />
+</div>
+<div id="div1">
+	<!--<div>
+    	<p>据马云说，软银的孙正义要求走第二条。“你马云有办法的，我在中国投资了那么多公司都可以（协议控制），凭什么你不可以？”
+杨致远“两边倒”。马云拿起桌上的笔和烟对本刊记者比划，“反对（马云终止协议控制的提议）吧，他觉得公司如果（拿不到牌照）垮了那他得承担责任；同意吧，他回去（向雅虎）交代不了，所以他干脆不表态。”</p>
+        <a href="javascript:;" class="ref">22</a>
+        <a href="javascript:;" class="acc">0</a>
+    </div>-->
+</div>
+<div id="page">
+	<!--<a href="#">1</a>
+	<a href="#">2</a>
+	<a href="#">3</a>
+	<a href="#">...</a>
+	<a href="#">8</a>-->
+</div>
+</body>
+</html>

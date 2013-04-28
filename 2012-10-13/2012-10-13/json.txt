@@ -1,0 +1,1 @@
+[{name: 'blue', pass: '123456'}, {name: '马明星', pass: '654321'}, {name: '魏宁', pass: 'abcdef'}]

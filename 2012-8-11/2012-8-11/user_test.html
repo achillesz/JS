@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin:0; padding:0;}
+div {margin:20px auto; width:300px; background:#EEE; border:1px solid #999; padding:20px; line-height:30px;}
+span {display:inline-block; width:80px;}
+input {width:200px;}
+#add_btn, #login_btn {width:50px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 用户注册ajax接口测试</title>
+<script src="js/ajax.js"></script>
+<script src="js/common.js"></script>
+<script src="js/m/user_m.js"></script>
+<script src="js/v/user_v.js"></script>
+<script src="js/c/user_c.js"></script>
+<script>
+window.onload=function ()
+{
+	var oBtnAdd=document.getElementById('add_btn');
+	var oUserC=new UserC();
+	
+	oBtnAdd.onclick=function ()
+	{
+		oUserC.regUser();
+	};
+};
+</script>
+</head>
+
+<body>
+<div id="div1">
+	<h2>用户注册</h2>
+	<span>用户名：</span><input id="add_user" type="text" /><br />
+    <span>密码：</span><input id="add_pass" type="password" /><br />
+    <input id="add_btn" type="button" value="注册" />
+</div>
+<div id="div2">
+	<h2>用户登陆</h2>
+	<span>用户名：</span><input id="login_user" type="text" /><br />
+    <span>密码：</span><input id="login_pass" type="password" /><br />
+    <input id="login_btn" type="button" value="登陆" />
+</div>
+</body>
+</html>

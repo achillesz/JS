@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+<link href="http://css.sohu.com/upload/global1.3.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="jquery-1.6.3.min.js"></script>
+<script type="text/javascript" src="jquery.lazyload.js"></script>
+<script type="text/javascript" src="img/base.js"></script>
+<style type="text/css">
+
+.box_cW{margin-top:16px; width:650px; height:300px;}
+
+</style>
+
+<script type="text/javascript">
+//生成1-4
+//alert(Math.ceil(Math.random()*4));
+window.onload = function()
+{
+	var aBox = j.getByClass(document,"box_cW");
+	
+	var imgurl = "img/01 (1).jpg";
+	
+	var arrJieGou = ["<div class='clear'><div style='width:650px; height:300px; overflow:hidden'><a href='#'><img src='"+imgurl+"' class='lazy' original='"+imgurl+"' style='margin-left:-0px; margin-top:-50px;'></a></div></div>","<div class='clear'><div class='l' style='width:472px; height:300px; overflow:hidden;'><a href='#'><img src='img/01 (1).jpg' class='lazy' original='img/01 (1).jpg' style='margin-left:-50px; margin-top:-50px;'></a></div><div class='r' style='width:173px;  height:300px;overflow:hidden;'><a href='#'><img src='img/01 (2).jpg' class='lazy' original='img/01 (2).jpg' style='margin-left:-250px; margin-top:-50px;'></a></div></div>","<div class='clear'><div class='l' style='width:226px;'><div class='img01' style='height:148px; overflow:hidden'><a href='#'><img src='img/01 (3).jpg' class='lazy' style='display: inline; ' original='../images/img08.jpg'></a></div><div class='img02' style='height:148px;margin-top:4px; overflow:hidden'><a href='#'><img src='img/01 (4).jpg' class='lazy' style='display: inline; ' original='../images/img08_1.jpg'></a></div></div><div class='r' style='width:420px;'><div class='img01' style='height:300px; overflow:hidden;'><a href='#'><img src='img/01 (5).jpg' class='lazy' style='display: inline; ' original='../images/img08_2.jpg'></a></div></div></div>","<div class='clear'><div class='l' style='width:466px'><div class='img01' style='height:148px; overflow:hidden;'><a href='#'><img src='img/01 (5).jpg' class='lazy' style='display: inline; ' original='../images/img09.jpg'></a></div><div class='img02 clear' style='height:148px; margin-top:4px;'><div class='img_L' style='width:226px; height:148px; overflow:hidden; float:left;'><a href='#'><img src='img/01 (6).jpg' class='lazy' style='display: inline; ' original='../images/img09_01.jpg'></a></div><div class='img_R' style='width:236px; height:148px; overflow:hidden; float:right'><a href='#'><img src='img/01 (7).jpg' class='lazy' style='display: inline; ' original='../images/img09_02.jpg'></a></div></div></div><div class='r' style='width:180px;'><div class='img01' style='height:300px; overflow:hidden;'><a href='#'><img src='img/01 (8).jpg' class='lazy' style='display: inline; ' original='../images/img09_03.jpg'></a></div></div></div>"];
+	
+
+	
+	for(var i = 0;i<aBox.length;i++)
+	{
+		var rand = Math.floor(Math.random()*4);
+		aBox[i].innerHTML=arrJieGou[rand];
+	}
+	
+	
+	
+	
+	$(function(){
+		$("img.lazy").show().lazyload({ 
+			 placeholder : "img/grey.gif",
+			effect : "fadeIn"
+		})
+	})
+	
+
+}
+
+
+
+
+
+
+
+
+
+</script>
+</head>
+
+<body>
+
+<div class="box_cW">
+   <!-- <div class="clear">
+        <div style="width:650px; height:300px; overflow:hidden">
+            <a href="#"><img src="img/01 (1).jpg" class="lazy" original="img/01 (1).jpg" style="margin-left:-0px; margin-top:-50px;"></a>
+        </div>
+    </div>-->
+</div>
+
+<div class="box_cW">
+    <!--<div class="clear">
+        <div class="l" style="width:472px; height:300px; overflow:hidden;">
+            <a href="#"><img src="img/01 (1).jpg" class="lazy" original="img/01 (1).jpg" style="margin-left:-50px; margin-top:-50px;"></a>
+        </div>
+        <div class="r" style="width:173px;  height:300px;overflow:hidden;">
+            <a href="#"><img src="img/01 (2).jpg" class="lazy" original="img/01 (2).jpg" style="margin-left:-250px; margin-top:-50px;"></a>
+        </div>
+    </div>-->
+</div>
+
+
+<div class="box_cW">
+    <!--<div class="clear">
+        <div class="l" style="width:226px;">
+            <div class="img01" style="height:148px; overflow:hidden"><a href="#"><img src="img/01 (3).jpg" class="lazy" style="display: inline; " original="../images/img08.jpg"></a></div>
+            <div class="img02" style="height:148px; overflow:hidden"><a href="#"><img src="img/01 (4).jpg" class="lazy" style="display: inline; " original="../images/img08_1.jpg"></a></div>
+        </div>
+        <div class="r" style="width:420px;">
+            <div class="img01" style="height:300px; overflow:hidden;"><a href="#"><img src="img/01 (5).jpg" class="lazy" style="display: inline; " original="../images/img08_2.jpg"></a></div>
+        </div>
+    </div>-->
+</div>
+
+<div class="box_cW">
+   <!-- <div class="clear">
+        <div class="l" style="width:466px">
+            <div class="img01" style="height:148px; overflow:hidden;"><a href="#"><img src="img/01 (5).jpg" class="lazy" style="display: inline; " original="../images/img09.jpg"></a></div>
+            <div class="img02 clear" style="height:148px; margin-top:4px;">
+               
+                <div class="img_L" style="width:226px; height:148px; overflow:hidden; float:left;"><a href="#"><img src="img/01 (6).jpg" class="lazy" style="display: inline; " original="../images/img09_01.jpg"></a></div>
+                <div class="img_R" style="width:236px; height:148px; overflow:hidden; float:right"><a href="#"><img src="img/01 (7).jpg" class="lazy" style="display: inline; " original="../images/img09_02.jpg"></a></div>  
+            </div>
+        </div>
+        <div class="r" style="width:180px;">
+            <div class="img01" style="height:300px; overflow:hidden;"><a href="#"><img src="img/01 (8).jpg" class="lazy" style="display: inline; " original="../images/img09_03.jpg"></a></div>
+        </div>
+    </div>-->
+</div>
+
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+<div class="box_cW"></div>
+
+
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

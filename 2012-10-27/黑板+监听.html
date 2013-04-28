@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script src="MyObject.js"></script>
+<script src="User.js"></script>
+<script src="Ul.js"></script>
+<script src="Ul_queue.js"></script>
+<script src="Text.js"></script>
+<script>
+function createObj()
+{
+	if(!createObj._obj)
+	{
+		var obj=new Object();
+		
+		createObj._obj=obj;
+	}
+	else
+	{
+		return createObj._obj;
+	}
+	
+	obj.datas=[];	//存东西
+	obj.add=function (str)
+	{
+		this.datas.push(str);
+	};
+	obj.get=function ()
+	{
+		return this.datas;
+	};
+	
+	return obj;
+}
+
+window.onload=function ()
+{
+	//1.注册
+	var oUser=new User();
+	(function (){
+		var oTxt=document.getElementById('txt_add_user');
+		var oPass=document.getElementById('txt_add_pass');
+		var oBtn=document.getElementById('btn_add');
+		
+		oBtn.onclick=function ()
+		{
+			oUser.reg(oTxt.value, oPass.value);
+		};
+	})();
+	
+	//2.ul
+	new Ul(oUser);
+	
+	//3.text
+	new Text(oUser);
+	
+	//4.ul2
+	new Ul2();
+};
+</script>
+</head>
+
+<body>
+<div id="div1">
+<h2>用户注册</h2>
+用户名：<input type="text" id="txt_add_user" /><br />
+密码：<input type="password" id="txt_add_pass" /><br />
+<input type="button" value="注册" id="btn_add" />
+</div>
+<ul id="ul1">
+</ul>
+<textarea id="txt1"></textarea>
+<ul id="ul2">
+</ul>
+</body>
+</html>

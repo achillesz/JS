@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script>
+function createObj()
+{
+	if(!createObj._obj)
+	{
+		var obj=new Object();
+		
+		createObj._obj=obj;
+	}
+	else
+	{
+		return createObj._obj;
+	}
+	
+	obj.datas=[];	//存东西
+	obj.add=function (str)
+	{
+		this.datas.push(str);
+	};
+	obj.get=function ()
+	{
+		return this.datas;
+	};
+	
+	return obj;
+}
+
+window.onload=function ()
+{
+	var oTxt=document.getElementById('txt1');
+	var oUl=document.getElementById('ul1');
+	var oBtn1=document.getElementById('btn1');
+	var oBtn2=document.getElementById('btn2');
+	
+	//添加
+	oBtn1.onclick=function ()
+	{
+		var obj=createObj();
+		
+		obj.add(oTxt.value);
+		
+		//li出来
+		var oLi=document.createElement('li');
+		
+		oLi.innerHTML=oTxt.value;
+		oTxt.value='';
+		
+		oUl.appendChild(oLi);
+	};
+	
+	oBtn2.onclick=function ()
+	{
+		var obj=createObj();
+		
+		alert(obj.get());
+	};
+};
+</script>
+</head>
+
+<body>
+<input type="text" id="txt1" />
+<input type="button" id="btn1" value="添加" />
+<ul id="ul1">
+</ul>
+
+<input type="button" id="btn2" value="读取" />
+</body>
+</html>

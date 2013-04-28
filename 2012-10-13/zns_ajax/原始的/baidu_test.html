@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {margin:0; padding:0;}
+
+#div1 {width:420px; margin:50px auto;}
+
+#txt1 {width:418px; height:20px;}
+#ul1 {width:418px; border:1px solid #817F82; display:none;}
+#ul1 li {font-size:14px; padding:6px 8px; list-style:none;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>智能课堂 —— 百度JSONp接口测试</title>
+<!--
+	Author:	blue@zhinengshe.com
+	Date:	2012-4-5
+
+	usage:	baidu.php?w=aaa&callback=succ
+	
+	return:	succ({q:"aaa",s:["爱啊哎呀我愿意","aaaa","aaa片","aaaa4444.com","爱啊哎呀我愿意全集","aaaa级","aaaa.me","aaalogo","aaa电池","aaayy"]});
+-->
+<script src="baidu.php?w=aaa&callback=succ"></script>
+<script>
+window.onload=function ()
+{
+	var oTxt=document.getElementById('txt1');
+	var oUl=document.getElementById('ul1');
+	var oScript=null;
+	
+	oTxt.onkeyup=function ()
+	{
+		if(oScript)
+		{
+			document.body.removeChild(oScript);
+		}
+		
+		oScript=document.createElement('script');
+		
+		oScript.type='text/javascript';
+		oScript.src='baidu.php?w='+encodeURI(oTxt.value)+'&callback=mySucc&t='+new Date().getTime();
+		
+		document.body.appendChild(oScript);
+	};
+};
+
+function mySucc(json)
+{
+	var w=json.q;
+	var arr=json.s;
+	var oUl=document.getElementById('ul1');
+	
+	if(arr.length)
+	{
+		oUl.style.display='block';
+		oUl.innerHTML='';
+		
+		for(var i=0;i<arr.length;i++)
+		{
+			var oLi=document.createElement('li');
+			
+			oLi.innerHTML=arr[i].replace(new RegExp(w, 'ig'), '<strong>'+w+'</strong>');
+			
+			oLi.onmouseover=function ()
+			{
+				this.style.background='#EEE';
+			};
+			oLi.onmouseout=function ()
+			{
+				this.style.background='';
+			};
+			
+			oUl.appendChild(oLi);
+		}
+	}
+	else
+	{
+		oUl.style.display='none';
+	}
+}
+</script>
+</head>
+
+<body>
+<div id="div1">
+	<input id="txt1" type="text" />
+    <ul id="ul1"></ul>
+</div>
+</body>
+</html>

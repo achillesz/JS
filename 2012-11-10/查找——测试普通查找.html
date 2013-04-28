@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[];
+for(var i=0;i<1000000;i++)
+{
+	arr[i]=i;
+}
+
+Array.prototype.indexOf=function (n)
+{
+	for(var i=0;i<this.length;i++)
+	{
+		if(arr[i]==n)
+		{
+			return i;
+		}
+	}
+};
+
+var t=new Date().getTime();
+
+for(var i=0;i<1000;i++)
+{
+	var m=Math.floor(Math.random()*1000000);
+	
+	arr.indexOf(m);
+}
+
+alert(new Date().getTime()-t);
+</script>
+</head>
+
+<body>
+</body>
+</html>

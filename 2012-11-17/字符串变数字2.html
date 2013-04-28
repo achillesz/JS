@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var str='abcdef';
+
+var num=0;
+
+for(var i=0;i<str.length;i++)
+{
+	var n=str.charCodeAt(i);
+	
+	num+=n;
+	num*=2;
+}
+
+alert(num.toString(16).toUpperCase());
+</script>
+</head>
+
+<body>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+.myAlert {width:300px; height:150px; background:#fff; border:5px solid #999; position:absolute; left:50%; margin-left:-150px; margin-top:-75px; top:50%; z-index:999; display:none;}
+.myAlert div {position:absolute; bottom:4px; left:0; text-align:center; width:100%;}
+.myAlert_back {width:100%; height:100%; background:black; opacity:0.3; filter:alpha(opacity:30); position:absolute; left:0; top:0; z-index:998; display:none;}
+</style>
+<script src="common.js"></script>
+<script src="MyAlert.js"></script>
+<script src="Alert.js"></script>
+<script src="Confirm.js"></script>
+<script>
+window.onload=function ()
+{
+	var oBtn=document.getElementById('btn1');
+	
+	oBtn.onclick=function ()
+	{
+		var oC=new Confirm('你是确定啊，还是确定啊？');
+		
+		oC.onok=function ()
+		{
+			alert('你点了确定');
+		};
+		oC.oncancel=function ()
+		{
+			alert('你点了取消');
+		};
+		
+		oC.show();
+	};
+};
+</script>
+</head>
+
+<body>
+<input id="btn1" type="button" value="弹出" />
+</body>
+</html>

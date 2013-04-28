@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+var arr=[];
+arr.length=1000;
+
+function hashAdd(ID, obj)
+{
+	//映射
+	var n=ID%arr.length;
+	
+	if(arr[n])
+	{
+		arr[n].push(obj);
+	}
+	else
+	{
+		arr[n]=[obj];
+	}
+}
+
+function hashFind(ID)
+{
+	//映射
+	var n=ID%arr.length;
+	
+	if(arr[n])
+	{
+		for(var i=0;i<arr[n].length;i++)
+		{
+			if(arr[n][i].ID==ID)
+			{
+				return arr[n][i];
+			}
+		}
+		
+		return null;
+	}
+	else
+	{
+		return null;
+	}
+}
+
+var p1={ID: 2145, name: 'blue'};
+var p2={ID: 3145, name: '海涛'};
+
+hashAdd(p1.ID, p1);
+hashAdd(p2.ID, p2);
+
+var obj=hashFind(2145);
+
+if(obj)
+{
+	alert('找到了：'+obj.name);
+}
+else
+{
+	alert('没找到');
+}
+</script>
+</head>
+
+<body>
+</body>
+</html>

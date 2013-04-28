@@ -1,0 +1,5 @@
+1.配置wamp（或其他PHP服务器）
+2.拷贝整个zns_ajax文件夹到www下
+3.拷贝libeay32.dll、ssleay32.dll到system32下
+4.修改php.ini，去掉 extension = php_curl.dll 前面的分号
+5.重启
